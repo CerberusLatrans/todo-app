@@ -8,9 +8,17 @@
     } from '../stores';
     
     export let taskID: number;
-    let task: Task = $tasksMap.get(taskID)!;
+    let task: Task  = $tasksMap.get(taskID)!;
 </script>
 
-<h3 contenteditable="true" bind:textContent={task.name}></h3>
-<p contenteditable="true" bind:textContent={task.description}></p>
-<button on:click>Complete Task</button>
+<div>
+    <h3 contenteditable="true" bind:textContent={task.name}></h3>
+    <p contenteditable="true" bind:textContent={task.description}></p>
+    <button on:click>Complete Task</button>
+</div>
+
+<style>
+    div {
+        border: solid white;
+    }
+</style>

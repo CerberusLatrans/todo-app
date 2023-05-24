@@ -6,28 +6,28 @@
         folderDirs,
         taskListsMap, 
         tasksMap
-    } from '../stores';
-    
+    } from '../stores';   
 
     export let taskListID: number;
     let taskList: TaskList = $taskListsMap.get(taskListID)!;
 
     function addTask(t: Task, idx: number): void {
-        // not using update method fo taskList
         taskList.insertIDs(idx, [t.id]);
-        tasksMap.setTask(t.id, t);
+        $tasksMap.set(t.id, t);
+        //tasksMap.setTask(t.id, t);
         console.log("ADD TASK")
         console.log(taskList);
         console.log($tasksMap)
+        taskList = taskList;
     }
 
     function killTask(id: number, idx: number) {
         taskList.killTaskID(idx);
-        let task: Task = $tasksMap.get(id)!;
-        task.completionTime = new Date();
-        console.log("KILL TASK " + task.name)
+        $tasksMap.get(id)!.completionTime = new Date();
+        console.log("KILL TASK " + $tasksMap.get(id)!.name)
         console.log(taskList);
         console.log($tasksMap)
+        taskList = taskList;
     }
 
 </script>
@@ -47,9 +47,11 @@
 
 <style>
 	.dark {
+        /*display:flex;
+        flex-direction: column;*/
         background-color: rgb(25, 30, 30);
 		color: white;
 		text-align: center;
-        height: 100vh;
+        height: 100%;
 	}
 </style>

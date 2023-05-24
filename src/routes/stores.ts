@@ -19,7 +19,7 @@ export class TaskList {
     graveyardIDs: number[] = [];
 
     constructor() {
-        Task.count += 1;
+        TaskList.count += 1;
     }
 
     moveIDs(from: number[], destination: number): void {
