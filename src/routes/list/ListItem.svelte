@@ -19,6 +19,7 @@
 
 <style>
     div {
-        border: solid white;
+        border: 2px solid white;
+        
     }
 </style>

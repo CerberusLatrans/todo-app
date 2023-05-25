@@ -32,7 +32,7 @@
 
 </script>
 
-<div class="dark">
+<div class="list-panel">
     {#if taskList != undefined}
         <h2 contenteditable="true" bind:textContent={taskList.name}></h2>
         <p contenteditable="true" bind:textContent={taskList.description}></p>
@@ -46,12 +46,13 @@
 </div>
 
 <style>
-	.dark {
-        /*display:flex;
-        flex-direction: column;*/
-        background-color: rgb(25, 30, 30);
+	.list-panel {
+        display:flex;
+        flex-direction: column;
+        align-items: stretch;
+        background-color: rgb(20, 33, 27);
 		color: white;
-		text-align: center;
+		text-align: left;
         height: 100%;
 	}
 </style>
