@@ -11,6 +11,8 @@
     export let taskListID: number;
     let taskList: TaskList = $taskListsMap.get(taskListID)!;
 
+    export let showHeader: boolean = true;
+
     function addTask(t: Task, idx: number): void {
         taskList.insertIDs(idx, [t.id]);
         $tasksMap.set(t.id, t);
@@ -29,13 +31,14 @@
         console.log($tasksMap)
         taskList = taskList;
     }
-
 </script>
 
 <div class="list-panel">
     {#if taskList != undefined}
-        <h2 contenteditable="true" bind:textContent={taskList.name}></h2>
-        <p contenteditable="true" bind:textContent={taskList.description}></p>
+        {#if showHeader}
+            <h2 contenteditable="true" bind:textContent={taskList.name}></h2>
+            <p contenteditable="true" bind:textContent={taskList.description}></p>
+        {/if}
         <button on:click={() => addTask(new Task(""), taskList.taskIDs.length)}>Add Task</button>
         <div>
             {#each taskList.taskIDs as id, idx (id) }
@@ -50,7 +53,7 @@
         display:flex;
         flex-direction: column;
         align-items: stretch;
-        background-color: rgb(20, 33, 27);
+        /*background-color: rgb(20, 33, 27);*/
 		color: white;
 		text-align: left;
         height: 100%;

@@ -61,15 +61,23 @@ export class Task {
     creationTime: Date = new Date();
 
     completionTime?: Date;
-    startTime?: Date;
     dueTime?: Date;
 
-    task_list: number[] = [];
+    subTaskListID?: number;
 
     constructor(name: string) {
         this.name = name;
         Task.count += 1;
-    }   
+    } 
+    
+    getSubTaskListID(taskListMap: Map<number, TaskList>): number {
+        if (this.subTaskListID==undefined) {
+            let subTaskList: TaskList = new TaskList();
+            taskListMap.set(subTaskList.id, subTaskList);
+            this.subTaskListID = subTaskList.id;
+        }
+        return this.subTaskListID;
+    }
 }
 
 /**
@@ -91,7 +99,11 @@ function makeExampleData() {
     let listsMap: Map<number, TaskList> = new Map();
     let tasksMap: Map<number, Task> = new Map();
 
-    let list0Tasks = [new Task("Task A"), new Task("Task B"), new Task("Task C")];
+    let taskA = new Task("Task A");
+    taskA.description = "This is a description of the first task on this list. This task also has subtasks which I plan to assign sub-subtasks to as well."
+    //let subtasks = [new Task("Subtask 1"), new Task("Subtask 2"), new Task("Subtask 3")]
+    //taskA.taskList = subtasks.map(x => x.id);
+    let list0Tasks = [taskA, new Task("Task B"), new Task("Task C")];
     let list1Tasks = [new Task("Task D"), new Task("Task F"), new Task("Task E")];
     for (let t of list0Tasks) {
         tasksMap.set(t.id, t)
@@ -99,11 +111,14 @@ function makeExampleData() {
     for (let t of list1Tasks) {
         tasksMap.set(t.id, t)
     }
+    /*for (let t of subtasks) {
+        tasksMap.set(t.id, t)
+    }*/
 
     let list0 = new TaskList();
-    list0.taskIDs = list0Tasks.map(x => x.id)
+    list0.taskIDs = list0Tasks.map(x => x.id);
     let list1 = new TaskList();
-    list1.taskIDs = list1Tasks.map(x => x.id) 
+    list1.taskIDs = list1Tasks.map(x => x.id);
 
     //DEBUG MAPS
     listsMap.set(list0.id, list0);
