@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { flip } from 'svelte/animate';
+
     import ListItem from './ListItem.svelte';
     import { Task, TaskList } from '../stores';
     import {
@@ -42,7 +44,13 @@
         <button on:click={() => addTask(new Task(""), taskList.taskIDs.length)}>Add Task</button>
         <div>
             {#each taskList.taskIDs as id, idx (id) }
-                <ListItem taskID={id} on:click={() => killTask(id, idx)}/>
+                <div
+                    animate:flip="{{delay: 400, duration: 400}}">
+                        <ListItem
+                        taskID={id}
+                        on:completed={() => killTask(id, idx)}/>
+                </div>
+                
             {/each}
         </div>
     {/if}
@@ -53,9 +61,14 @@
         display:flex;
         flex-direction: column;
         align-items: stretch;
-        /*background-color: rgb(20, 33, 27);*/
 		color: white;
 		text-align: left;
         height: 100%;
 	}
+    h2 {
+        margin-bottom: 0vw;
+    }
+    p {
+        margin: 1vw;
+    }
 </style>
