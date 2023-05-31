@@ -41,14 +41,15 @@
             <h2 contenteditable="true" bind:textContent={taskList.name}></h2>
             <p contenteditable="true" bind:textContent={taskList.description}></p>
         {/if}
-        <button on:click={() => addTask(new Task(""), taskList.taskIDs.length)}>Add Task</button>
+        <button on:click={() => addTask(new Task(""), 0)}>Add Task</button>
         <div>
             {#each taskList.taskIDs as id, idx (id) }
                 <div
-                    animate:flip="{{delay: 400, duration: 400}}">
+                    animate:flip="{{delay: 0, duration: 400}}">
                         <ListItem
                         taskID={id}
-                        on:completed={() => killTask(id, idx)}/>
+                        on:completed={() => killTask(id, idx)}
+                        on:addTask={() => addTask(new Task(""), idx+1)}/>
                 </div>
                 
             {/each}

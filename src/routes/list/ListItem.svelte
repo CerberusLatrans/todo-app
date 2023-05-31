@@ -15,9 +15,14 @@
     
     export let taskID: number;
     let task: Task  = $tasksMap.get(taskID)!;
+
+    let m = { x: 0, y: 0 };
+
     let completed = false;
     let focus = false;
     let hover = false;
+    let barHover = false;
+
     const dispatch = createEventDispatcher();
     
     async function toggleComplete() {
@@ -27,6 +32,7 @@
             dispatch('completed');
         }
     }
+
     function getPctTimeLeft() {
         task = task;
         if (task.dueTime != undefined) {
@@ -35,7 +41,7 @@
             console.log(pct)
             return pct
         } else {
-            return 0.5
+            return 1
         }     
     }
     
@@ -49,8 +55,9 @@
 <!--<div on:mouseenter={() => active=true} on:mouseleave={() => active=false}>-->
 <div class="wrapper"
     on:focusout={() => {if (!hover) {focus=false}}}
-    in:slide="{{ axis: "y", duration: 500}}"
-    out:fly="{{ x: -200, duration: 500, easing: backIn }}">
+    on:mousemove="{e => m = { x: e.clientX, y: e.clientY }}"
+    in:fly="{{ y: -10, duration: 200, opacity: 1}}"
+    out:fly="{{ x: -200, duration: 200, easing: backIn }}">
 
     <div
         class="button"
@@ -73,30 +80,42 @@
     
 
     {#if (task.description!="" || focus)}
-        <div class="bar"></div>
         <p 
             style:grid-area="description"
             contenteditable="true"
             bind:textContent={task.description}
-            on:focusin={() => focus=true}>
+            on:focusin={() => focus=true}
+            on:blur={() => focus = false}
             on:mouseenter={() => hover=true}
-            on:mouseout={() => hover=false}
-            on:blur={() => hover=false}></p>
+            on:mouseout={() => hover=false}></p>
     {/if}
 
-    <div class="bar"></div>
+    <div class="bar" 
+        on:click={() => dispatch('addTask')}
+        on:mouseenter={() => barHover=true}
+        on:mouseout={() => barHover=false}>
+        {#if barHover}
+            <div
+            style:background-color="white"
+            style:border-radius="50%"
+            style:position="fixed"
+            style:top={m.y}
+            style:left={m.x}
+            style:height="1vw"
+            on:click={toggleComplete}></div>
+        {/if}
+    </div>
 
     <div 
         style:grid-area="timer"
-        style:height="0.2vw"
+        style:height="0.5vw"
         style:width="100%"
-        style:background-color="white"
+        style:background-color="red"
         style:margin-bottom="1vw">
-        <div style="height:0.2vw; width:{getPctTimeLeft()*100}%; background-color:red;"></div>
+        <div style="height:0.5vw; width:{getPctTimeLeft()*100}%; background-color:white;"></div>
     </div>
 
     {#if focus || (task.subTaskListID!=undefined && taskListNonEmpty(task.subTaskListID))}
-        <div class="bar"></div>
         <div style="grid-area:subtasks"
             on:mouseenter={() => hover=true}
             on:mouseout={() => hover=false}
